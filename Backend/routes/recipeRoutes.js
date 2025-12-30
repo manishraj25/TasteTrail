@@ -8,6 +8,7 @@ import {
 } from "../controllers/recipeController.js";
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
+
 const router = express.Router();
 
 // Public
@@ -15,8 +16,21 @@ router.get("/", getAllRecipes);
 router.get("/:id", getRecipeById);
 
 // Admin only
-router.post("/", protect, adminOnly, createRecipe);
-router.put("/:id", protect, adminOnly, updateRecipe);
+router.post(
+  "/",
+  protect,
+  adminOnly,
+  upload.single("image"),
+  createRecipe
+);
+
+router.put(
+  "/:id",
+  protect,
+  adminOnly,
+  upload.single("image"),
+  updateRecipe
+);
 router.delete("/:id", protect, adminOnly, deleteRecipe);
 
 export default router;

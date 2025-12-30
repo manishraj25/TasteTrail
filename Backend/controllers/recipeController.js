@@ -4,13 +4,38 @@ export const createRecipe = async (req, res) => {
   try {
     const recipe = await Recipe.create({
       ...req.body,
+      image: req.file?.path,
       createdBy: req.user.id
     });
+
     res.status(201).json(recipe);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const updateRecipe = async (req, res) => {
+  try {
+    const updates = {
+      ...req.body
+    };
+
+    if (req.file) {
+      updates.image = req.file.path;
+    }
+
+    const recipe = await Recipe.findByIdAndUpdate(
+      req.params.id,
+      updates,
+      { new: true }
+    );
+
+    res.json(recipe);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 export const getAllRecipes = async (req, res) => {
   try {
@@ -31,18 +56,6 @@ export const getRecipeById = async (req, res) => {
   }
 };
 
-export const updateRecipe = async (req, res) => {
-  try {
-    const recipe = await Recipe.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(recipe);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 export const deleteRecipe = async (req, res) => {
   try {
