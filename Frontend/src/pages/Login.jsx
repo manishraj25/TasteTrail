@@ -1,22 +1,62 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-  const submit = async () => {
-    const res = await api.post("/auth/login", { email, password });
-    localStorage.setItem("token", res.data.token);
-    window.location.href = "/";
-  };
 
-  return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-xl font-bold">Login</h2>
-      <input className="input" placeholder="Email" onChange={e => setEmail(e.target.value)} />
-      <input className="input" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
-      <button className="btn" onClick={submit}>Login</button>
-    </div>
-  );
+    const [formData, setFormData] = useState({ email: "", password: "" });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const user = await login(formData.email, formData.password);
+            navigate("/recipes");
+        } catch (err) {
+            alert(err.response?.data?.message || "Login failed");
+        }
+    };
+
+    return (
+        <div className="flex justify-center items-center min-h-[90vh]  w-full">
+            <div className=" px-20 py-14 rounded-lg shadow-lg w-[37vw]">
+                <form onSubmit={handleSubmit} >
+                    <h2 className="text-2xl font-semibold mb-6 text-center">Log in to <span className="text-green-600">TasteTrail</span></h2>
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        className="w-full px-3 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={handleChange}
+                    />
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        className="w-full px-3 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        onChange={handleChange}
+                    />
+                    <button
+                        type="submit"
+                        className="w-full hover:fon bg-green-600 text-white py-2 rounded-md hover:bg-green-700"
+                    >
+                        Login
+                    </button>
+                </form>
+                <div className="flex flex-col items-center mt-20 ">
+                    <p className="text-center">Don't have an account?</p>
+                    <Link to="/register" className="w-1/3 text-center mt-2 text-green-500 border-2 border-green-500  py-1.5 rounded-lg hover:border-green-600 hover:text-green-600">
+                        Register
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
 }

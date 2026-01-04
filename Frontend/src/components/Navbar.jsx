@@ -1,21 +1,36 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const token = localStorage.getItem("token");
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
+
+  if (loading) return null; // or spinner
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <nav className="bg-green-600 p-4 text-white flex justify-between">
-      <Link to="/" className="font-bold">TasteTrail</Link>
+      <Link to="/" className="font-bold">
+        TasteTrail
+      </Link>
+
       <div className="space-x-4">
-        {token ? (
+        {user ? (
           <>
             <Link to="/meal-planner">Meal Planner</Link>
             <Link to="/shopping-list">Shopping List</Link>
             <Link to="/profile">Profile</Link>
-            <button onClick={() => {
-              localStorage.clear();
-              location.href = "/login";
-            }}>Logout</button>
+
+            <button
+              onClick={handleLogout}
+              className="bg-white text-green-600 px-3 py-1 rounded"
+            >
+              Logout
+            </button>
           </>
         ) : (
           <>
