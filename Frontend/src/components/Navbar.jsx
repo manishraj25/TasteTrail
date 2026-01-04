@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-green-600 p-4 text-white flex justify-between">
-      <Link to="/" className="font-bold">
+      <Link to="/" className="font-bold text-xl">
         TasteTrail
       </Link>
 
