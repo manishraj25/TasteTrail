@@ -12,6 +12,7 @@ import MealPlanner from "./pages/MealPlanner";
 import ShoppingList from "./pages/ShoppingList";
 import Profile from "./pages/Profile";
 import AdminRecipes from "./pages/AdminRecipes";
+import DashboardPage from "./pages/DashboardPage";
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -32,6 +33,7 @@ export default function App() {
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/meal-planner" element={<MealPlanner />} />
           <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/profile" element={<Profile />} />

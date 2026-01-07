@@ -5,19 +5,33 @@ export default function Navbar() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
 
-  if (loading) return null; // or spinner
+  if (loading) return null;
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
 
-  return (
-    <nav className="bg-green-600 p-4 text-white flex justify-between">
-      <Link to="/" className="font-bold text-xl">
-        TasteTrail
-      </Link>
+  const handleLogoClick = () => {
+    if (user) {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
 
+  return (
+    <nav className="bg-green-600 p-4 text-white flex justify-between items-center">
+      
+      {/* LOGO */}
+      <button
+        onClick={handleLogoClick}
+        className="font-bold text-xl focus:outline-none"
+      >
+        TasteTrail
+      </button>
+
+      {/* NAV LINKS */}
       <div className="space-x-4">
         {user ? (
           <>

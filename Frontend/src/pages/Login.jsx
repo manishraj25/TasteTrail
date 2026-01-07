@@ -17,7 +17,7 @@ export default function Login() {
         e.preventDefault();
         try {
             const user = await login(formData.email, formData.password);
-            navigate("/recipes");
+            navigate("/dashboard");
         } catch (err) {
             alert(err.response?.data?.message || "Login failed");
         }

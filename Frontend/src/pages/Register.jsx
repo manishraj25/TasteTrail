@@ -37,7 +37,7 @@ const Register = () => {
                 formData.email,
                 formData.password
             );
-            navigate("/recipes");
+            navigate("/dashboard");
         } catch (err) {
             alert(err.response?.data?.message || "Signup failed");
         } finally {
